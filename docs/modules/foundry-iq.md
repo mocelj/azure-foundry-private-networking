@@ -94,7 +94,7 @@ billing for the shared private link.
 | Postprovision | Knowledge base `retrieve` returns *Expense reimbursement*; agent smoke: `mcp_call` succeeds and the answer mentions Bastion |
 | Live `Test-Deployment.ps1` | Connection config; in-VNet: agent called `knowledge_base_retrieve` successfully and answered **220 EUR**; with A+: link approved, search MI role, `modelQueryPlanning` in a retrieve from the private client |
 
-Live results: first run 2026-11-18; 2026-11-19 with the GA MCP API version: standalone 71/71 and hub-spoke 67/67 (network + in-VNet).
+Live results: first run 2026-11-18 (see [validation summary](../security/validation-summary.md)); 2026-11-19 with the GA MCP API version: standalone 71/71 and hub-spoke 67/67 (network + in-VNet).
 
 ## Deferred option (documented, not implemented)
 

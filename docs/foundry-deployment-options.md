@@ -14,7 +14,7 @@ to their source. **Preview** features are marked as such.
 
 **Related documents:** [networking walk-through](networking/networking-walkthrough.md) (packet-level
 detail for network architects) · [ADR 0001 Foundry resource architecture](adr/0001-foundry-resource-architecture.md) ·
-[hosted agent module](modules/hosted-agent-demo.md) ·
+[ADR 0003 hosted agents](adr/0003-hosted-agents.md) ·
 [security design](security/security-design.md).
 
 ## Contents
@@ -146,7 +146,8 @@ management-plane channel) or an in-network `azd` runner for that.
 | Identity | Project managed identity | Dedicated, platform-created **agent identity** (Entra) plus the project managed identity for platform operations |
 | Status | GA | Managed hosting **GA**; Python hosting package `agent-framework-foundry-hosting` **prerelease**; agent-level guardrails **preview** |
 
-Sources: [What are hosted agents?](https://learn.microsoft.com/azure/foundry/agents/concepts/hosted-agents).
+Sources: [What are hosted agents?](https://learn.microsoft.com/azure/foundry/agents/concepts/hosted-agents),
+[ADR 0003](adr/0003-hosted-agents.md).
 
 ### 2.4 Standard agent setup
 
@@ -214,7 +215,7 @@ customer data ([public quick demo](public-quick-demo.md)).
 |---|---|
 | Inbound | Laptop → public Foundry endpoint. `publicNetworkAccess: Enabled`, `networkAcls.defaultAction: Deny`, `ipRules = PUBLIC_ALLOWED_IPS` (IPv4/CIDR; IPv6 clients not supported) |
 | Prompt agent egress | Basic setup: no network isolation, agent state in Microsoft-managed storage |
-| Hosted agent egress | Not part of this profile. G is the simplest fit for hosted agents (quickstart path, public egress) but it was not validated here |
+| Hosted agent egress | Not part of this profile. ADR 0003 rates G as the simplest fit (quickstart path, public egress) but it was not validated here |
 | DNS | Public DNS only; no private zones |
 
 ### 4.3 Identity, RBAC and security controls

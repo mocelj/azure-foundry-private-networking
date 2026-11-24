@@ -1,7 +1,7 @@
 # Deployment walkthrough (standalone, default profile)
 
 Expected duration: ~25 minutes (≈15 min provisioning for the core; ~25–30 min with all optional
-modules). Validated in **swedencentral** (latest: 2026-11-19).
+modules). Validated in **swedencentral** (latest: 2026-11-19, see [validation summary](security/validation-summary.md)).
 For hub-spoke see [deployment-guide.md](deployment-guide.md) and [hub-integration.md](hub-integration.md).
 Which option to choose (public, standalone, hub-spoke, spoke-ready, managed VNet; prompt and hosted agents): [foundry-deployment-options.md](foundry-deployment-options.md) ([PDF](foundry-deployment-options.pdf)).
 
@@ -63,7 +63,8 @@ pwsh ./scripts/validation/Test-Deployment.ps1
 ```
 
 The script prints PASS / FAIL / INCONCLUSIVE per check and writes `.test-output/validation-*.md`.
-It starts the jumpbox if auto-shutdown deallocated it.
+It starts the jumpbox if auto-shutdown deallocated it. See
+[validation summary](security/validation-summary.md) for the expected results.
 
 ## 6. Connect to the jumpbox (interactive)
 

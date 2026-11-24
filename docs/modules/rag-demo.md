@@ -92,7 +92,7 @@ From PowerShell on the jumpbox: `curl.exe -sk -X POST -H "Content-Type: applicat
 | Deploy-time (`Deploy-RagApp.ps1`) | `/healthz` + smoke question in-VM, retried while RBAC propagates |
 | Live (`Test-Deployment.ps1`) | network: subnet/NSG; identity: VM MI roles + no other assignments; invnet (jumpbox → app over the VNet): health + grounded answer citing `pol-003`; negative: RAG VM has no internet egress |
 
-Live results: 75/75 on the first standalone environment (2026-11-18, re-provision idempotent); latest full runs 2026-11-19: standalone 97/97, hub-spoke 90/90.
+Live results: 75/75 on the first standalone environment (2026-11-18, re-provision idempotent); latest full runs 2026-11-19: standalone 97/97, hub-spoke 90/90 (see [validation summary](../security/validation-summary.md)).
 
 ## Updating the app
 

@@ -11,7 +11,7 @@ management and automation, DNS in hub-spoke, and hosted agents (A, B, F).
 
 **Evidence:** IP addresses and results come from live environments in Sweden Central
 (November 2026, one environment per option) and from the Bicep in
-`infra/`. Everything marked *validated* was exercised by `scripts/validation/Test-Deployment.ps1`. Statements from Microsoft Learn link to their source.
+`infra/`. Everything marked *validated* was exercised by `scripts/validation/Test-Deployment.ps1`([validation summary](../security/validation-summary.md)). Statements from Microsoft Learn link to their source.
 
 Diagram source: [`networking-walkthrough.drawio`](../img/networking/networking-walkthrough.drawio) (20 pages,
 draw.io) · PDF: [networking-walkthrough.pdf](networking-walkthrough.pdf).
@@ -459,7 +459,7 @@ private endpoint.*
 Differences to prompt agents: the agent loop runs in **your** code (set iteration/time limits); the
 agent's own egress goes through the agent subnet (NSG, NAT / hub firewall) or the managed outbound rules;
 with a toolbox, the agent identity needs **no** RBAC on the tool target (the connection's credential is
-used). Details: [hosted agent module](../modules/hosted-agent-demo.md).
+used). Details: [ADR 0003](../adr/0003-hosted-agents.md), [hosted agent module](../modules/hosted-agent-demo.md), [validation summary](../security/validation-summary.md).
 
 ## 10. Egress allow-lists and observed denies
 
@@ -547,4 +547,5 @@ knowledge Search .11; records in the hub's central zones.
 - [Private endpoint DNS values](https://learn.microsoft.com/azure/private-link/private-endpoint-dns)
 - Repository: [ADR](../adr/0001-foundry-resource-architecture.md) · [Private DNS](../private-dns.md) ·
   [Network directions](../network-directions.md) · [Private Link explained](../private-link-explained.md) ·
-  [Hub integration](../hub-integration.md)
+  [Hub integration](../hub-integration.md) ·
+  [Validation summary](../security/validation-summary.md)

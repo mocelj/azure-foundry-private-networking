@@ -74,7 +74,8 @@ and be logged.
 | Static (profile `managed-vnet`) | Injection uses the managed network, no `snet-agent`; managed network `AllowOnlyApprovedOutbound`; only private endpoint outbound rules (no FQDN); knowledge search rule present; account MI gets exactly one Network Connection Approver assignment |
 | Live `Test-Deployment.ps1` | Injection mode; isolation mode; outbound rules listed; **no FQDN rule**; repo rules `Active`; no customer agent subnet; plus every existing check (agent create/run, AI Search tool, Foundry IQ, traces, RAG, public negatives) |
 
-**Live result (2026-11-19, standalone + all optional modules, swedencentral): 104/104 PASS**; latest:
+**Live result (2026-11-19, standalone + all optional modules, swedencentral): 104/104 PASS**
+(see [validation summary](../security/validation-summary.md)); latest:
 **105/105 + hosted agent PASS** (2026-11-23). Observed outbound rules:
 the service-created private endpoint rules to Cosmos DB (`sql`), Storage (`blob`) and the agent Search,
 the repo's `pe-knowledge-search` and `pe-ampls` (+ `pe-foundry-account` since 2026-11-23), and the service tags `AzureActiveDirectory` and

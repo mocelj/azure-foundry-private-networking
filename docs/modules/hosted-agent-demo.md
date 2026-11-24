@@ -1,7 +1,7 @@
 # Optional module 7 — Hosted agent demo (Agent Framework + toolbox)
 
 Your own agent code, run by Foundry as a **hosted agent** on the same private foundation as the prompt
-agents. Network paths per mode: [deployment options, section 11](../foundry-deployment-options.md#11-agents-in-private-networks).
+agents. Decision and live evidence: [ADR 0003](../adr/0003-hosted-agents.md).
 
 Enable (requires the Foundry IQ module and an in-network private client):
 
@@ -20,8 +20,9 @@ to [`managed-vnet.env`](../../examples/managed-vnet/managed-vnet.env) (all modul
 [`hub-spoke.env`](../../examples/hub-spoke/hub-spoke.env) together with `ENABLE_AI_SEARCH`, `ENABLE_FOUNDRY_IQ`
 and `PRIVATE_CLIENT_VM_ID` (hub workstation, as validated in B).
 
-Status: **module implemented and validated live 2026-11-24** (standalone full demo: provision 33 min, `Test-Deployment.ps1` 103/103 incl. the `hosted` section). The deployment path itself
-(azd project + script) was validated live in A, B and F on 2026-11-23.
+Status: **module implemented and validated live 2026-11-24** (standalone full demo: provision 33 min, `Test-Deployment.ps1` 103/103 incl. the `hosted` section, [validation summary](../security/validation-summary.md)). The deployment path itself
+(azd project + script) was validated live in A, B and F on 2026-11-23
+([validation summary](../security/validation-summary.md)).
 
 ## What it deploys
 

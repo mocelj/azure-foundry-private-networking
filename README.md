@@ -193,7 +193,9 @@ All settings: [infra/main.parameters.json](infra/main.parameters.json) and the [
 | Live: network, identity, public negatives (with a valid token), in-VNet functional tests | `pwsh scripts/validation/Test-Deployment.ps1` | yes |
 
 Negative tests call the public endpoints **with a valid token** and only pass on a *network* rejection
-(403 + public-access/firewall error); a 401 is reported as inconclusive.
+(403 + public-access/firewall error); a 401 is reported as inconclusive. Method, results per option and
+findings: [validation summary](docs/security/validation-summary.md); click-by-click user test:
+[end-to-end test guide](docs/e2e-test-guide.md).
 
 | Profile | Latest live result | Date |
 |---|---|---|
@@ -234,10 +236,10 @@ subscription than the environment. Don't reuse an account name right after a pur
 | Topic | Documents |
 |---|---|
 | Choosing an option | [Deployment options](docs/foundry-deployment-options.md) ([PDF](docs/foundry-deployment-options.pdf)) · [Whitepaper](docs/whitepaper/foundry-private-networking-whitepaper.md) ([PDF](docs/whitepaper/foundry-private-networking-whitepaper.pdf)) · [Cost estimation](docs/cost-estimation.md) |
-| Deploying | [Deployment guide](docs/deployment-guide.md) · [Walkthrough](docs/walkthrough.md) · [Hub integration](docs/hub-integration.md) · [Naming conventions](docs/naming-conventions.md) · [Spoke-ready handover](docs/spoke-ready-handover.md) · [Public quick demo](docs/public-quick-demo.md) |
-| Architecture | [Architecture](docs/architecture/architecture.md) · [ADR 0001: Foundry resource architecture](docs/adr/0001-foundry-resource-architecture.md) · [Compatibility](docs/compatibility.md) |
+| Deploying | [Deployment guide](docs/deployment-guide.md) · [Walkthrough](docs/walkthrough.md) · [Hub integration](docs/hub-integration.md) · [Naming conventions](docs/naming-conventions.md) · [Spoke-ready handover](docs/spoke-ready-handover.md) · [Public quick demo](docs/public-quick-demo.md) · [End-to-end test guide](docs/e2e-test-guide.md) · [Customer demo script (20–30 min)](docs/customer-demo.md) |
+| Architecture | [Architecture](docs/architecture/architecture.md) · [ADR 0001: Foundry resource architecture](docs/adr/0001-foundry-resource-architecture.md) · [ADR 0003: Hosted agents](docs/adr/0003-hosted-agents.md) · [Compatibility](docs/compatibility.md) |
 | Networking | [Networking walk-through](docs/networking/networking-walkthrough.md) ([PDF](docs/networking/networking-walkthrough.pdf)) · [Private DNS](docs/private-dns.md) · [Private Link explained](docs/private-link-explained.md) · [Network directions](docs/network-directions.md) · [Private-networking limitations](docs/private-networking-limitations.md) |
-| Security | [Security design](docs/security/security-design.md) · [Threat model](docs/security/threat-model.md) · [Identity and RBAC](docs/identity-rbac.md) |
+| Security | [Security design](docs/security/security-design.md) · [Validation summary](docs/security/validation-summary.md) · [Threat model](docs/security/threat-model.md) · [Identity and RBAC](docs/identity-rbac.md) |
 | Modules | [AI Search](docs/modules/ai-search.md) · [RAG demo](docs/modules/rag-demo.md) · [Agent demo](docs/modules/agent-demo.md) · [Monitoring](docs/modules/monitoring.md) · [Foundry IQ](docs/modules/foundry-iq.md) · [Hosted agent](docs/modules/hosted-agent-demo.md) · [Managed VNet](docs/modules/managed-vnet.md) |
 | Operations | [Troubleshooting](docs/troubleshooting.md) |
 

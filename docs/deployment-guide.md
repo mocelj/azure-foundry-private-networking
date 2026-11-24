@@ -107,7 +107,7 @@ Invoke-Pester tests                                                             
 
 Sections: `network`, `identity`, `public` (negative tests from your machine with a **valid** token:
 only a 403 with a network reason counts as PASS), `invnet` (functional tests on the private client), `hosted` (module 7 only: agent exists, private invoke with citation, jailbreak → `400 content_filter`, public 403 on the agent endpoint, agent identity RBAC).
-Reports: `.test-output/validation-<timestamp>.md`.
+Reports: `.test-output/validation-<timestamp>.md`. See [validation summary](security/validation-summary.md).
 
 ## 7. Tear down
 

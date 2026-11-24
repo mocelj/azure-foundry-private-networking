@@ -57,7 +57,8 @@ Live results: 77/77 on the first standalone environment (2026-11-18; re-deploy r
 ## Try it
 
 Bastion → jumpbox → Edge → Foundry portal → project `private-demo` → **Agents** →
-`contoso-policy-agent` → Playground. Ask, for example, "What is the hotel limit per night in Europe?".
+`contoso-policy-agent` → Playground. Use the questions from
+[e2e-test-guide.md](../e2e-test-guide.md#part-8--private-rag-app-module-3-5-min).
 Each answer cites the policy title. Citation markers such as `【4:0†source】` in the raw API text are
 the standard Agent Service annotation placeholders.
 
