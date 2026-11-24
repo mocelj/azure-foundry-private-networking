@@ -243,6 +243,30 @@ subscription than the environment. Don't reuse an account name right after a pur
 | Modules | [AI Search](docs/modules/ai-search.md) · [RAG demo](docs/modules/rag-demo.md) · [Agent demo](docs/modules/agent-demo.md) · [Monitoring](docs/modules/monitoring.md) · [Foundry IQ](docs/modules/foundry-iq.md) · [Hosted agent](docs/modules/hosted-agent-demo.md) · [Managed VNet](docs/modules/managed-vnet.md) |
 | Operations | [Troubleshooting](docs/troubleshooting.md) |
 
+## Related Microsoft samples
+
+This repository is an **independent implementation**, not a copy or fork. Its design was compared against
+Microsoft's official Foundry infrastructure samples, which are the reference for each networking option:
+
+| Microsoft template | Option | Related option here |
+|---|---|---|
+| [`10-private-network-basic`](https://github.com/microsoft-foundry/foundry-samples/tree/main/infrastructure/infrastructure-setup-bicep/10-private-network-basic) | Public egress with a private endpoint | — |
+| [`11-private-network-basic-vnet`](https://github.com/microsoft-foundry/foundry-samples/tree/main/infrastructure/infrastructure-setup-bicep/11-private-network-basic-vnet) | BYO VNet, platform-managed data resources | — (this repo always uses Standard setup) |
+| [`15-private-network-standard-agent-setup`](https://github.com/microsoft-foundry/foundry-samples/tree/main/infrastructure/infrastructure-setup-bicep/15-private-network-standard-agent-setup) | BYO VNet, bring-your-own data resources | A standalone, B hub-spoke, C spoke-ready |
+| [`16-private-network-standard-agent-apim-setup`](https://github.com/microsoft-foundry/foundry-samples/tree/main/infrastructure/infrastructure-setup-bicep/16-private-network-standard-agent-apim-setup) | BYO VNet behind Azure API Management | — |
+| [`18-managed-virtual-network`](https://github.com/microsoft-foundry/foundry-samples/tree/main/infrastructure/infrastructure-setup-bicep/18-managed-virtual-network) | Managed virtual network | F managed VNet (preview) |
+| [`41-standard-agent-setup`](https://github.com/microsoft-foundry/foundry-samples/tree/main/infrastructure/infrastructure-setup-bicep/41-standard-agent-setup) | Public, bring-your-own storage | — |
+
+The templates live in the [Foundry samples infrastructure setup repository](https://github.com/microsoft-foundry/foundry-samples/tree/main/infrastructure/infrastructure-setup-bicep)
+(Bicep, with a Terraform mirror). Microsoft Learn maps them to goals in
+[Networking options for Foundry Agent Service](https://learn.microsoft.com/azure/foundry/agents/concepts/networking-options#networking-options-by-scenario)
+and [Set up private networking](https://learn.microsoft.com/azure/foundry/agents/how-to/virtual-networks);
+if a repository link is unavailable, start from those Learn pages.
+
+The hosted-agent code (`src/hosted-agents`) follows the
+[Azure AI Projects SDK hosted-agent samples](https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/ai/azure-ai-projects/samples/hosted_agents)
+(toolbox agent pattern).
+
 ## Contributing, security and license
 
 - Contributions: [CONTRIBUTING.md](CONTRIBUTING.md) · [Code of conduct](CODE_OF_CONDUCT.md)
