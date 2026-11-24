@@ -1,0 +1,63 @@
+# azd project for the hosted-agent demo (separate from the infrastructure project in the repo root).
+#
+# Runs on a PRIVATE CLIENT inside the network (jumpbox / hub workstation = in-VNet runner), because the
+# Foundry data plane has public network access disabled. The Foundry project already exists (deployed by
+# the root azd project); this project only deploys the toolbox and the hosted agent (`azd deploy`).
+#
+# Required azd env values (set by scripts/agents/Deploy-HostedAgentAzd.ps1):
+#   AZURE_SUBSCRIPTION_ID, AZURE_LOCATION, AZURE_AI_PROJECT_ID, AZURE_AI_PROJECT_ENDPOINT,
+#   FOUNDRY_PROJECT_ENDPOINT, AZURE_AI_MODEL_DEPLOYMENT_NAME
+# Prerequisite: project connection `knowledge-base-mcp` (RemoteTool, ProjectManagedIdentity, audience
+# https://search.azure.com/) created by the root Bicep when ENABLE_FOUNDRY_IQ=true.
+name: contoso-hosted-agents
+services:
+  contoso-policy-tools:
+    host: azure.ai.toolbox
+    description: Contoso policy knowledge base (Foundry IQ) for hosted agents
+    tools:
+      - type: mcp
+        server_label: contoso_policies_kb
+        project_connection_id: knowledge-base-mcp
+
+  contoso-policy-hosted:
+    project: contoso-policy-hosted
+    host: azure.ai.agent
+    language: python
+    kind: hosted
+    name: contoso-policy-hosted
+    description: Contoso security policy assistant (hosted agent, Agent Framework, toolbox)
+    uses:
+      - contoso-policy-tools
+    codeConfiguration:
+      runtime: python_3_13
+      entryPoint: main.py
+      dependencyResolution: remote_build
+    container:
+      resources:
+        cpu: "1"
+        memory: 2Gi
+    environmentVariables:
+      - name: AZURE_AI_MODEL_DEPLOYMENT_NAME
+        value: ${AZURE_AI_MODEL_DEPLOYMENT_NAME}
+      - name: TOOLBOX_NAME
+        value: contoso-policy-tools
+      - name: PYTHONNOUSERSITE
+        value: "1"
+      # Loop limits enforced by the agent code (main.py; Agent Framework function invocation options).
+      - name: HOSTED_AGENT_MAX_ITERATIONS
+        value: "8"
+      - name: HOSTED_AGENT_MAX_TOOL_CALLS
+        value: "8"
+      - name: HOSTED_AGENT_TIMEOUT_SECONDS
+        value: "120"
+      - name: HOSTED_AGENT_MAX_OUTPUT_TOKENS
+        value: "4096"
+    protocols:
+      - protocol: responses
+        version: 2.0.0
+    # Agent-boundary guardrail (preview): screens user input and final output of the agent itself, in
+    # addition to the model deployment's content filter on every model call. Needs the full ARM ID;
+    # azd doesn't expand ${VAR} here, so Deploy-HostedAgentAzd.ps1 replaces __RAI_POLICY_ID__.
+    policies:
+      - type: rai_policy
+        raiPolicyName: __RAI_POLICY_ID__

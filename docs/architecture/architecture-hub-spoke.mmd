@@ -1,0 +1,42 @@
+%% Diagram 2 — Enterprise hub-spoke integration (NETWORK_MODE=hub-spoke)
+flowchart LR
+  onprem([Corporate workstations<br/>on-premises]) -- "ExpressRoute / VPN" --> gw
+
+  subgraph hub[Customer hub VNet — customer owned, NOT modified unless opted in]
+    gw[VPN / ER gateway]
+    fw[Azure Firewall / NVA<br/>FQDN + service-tag egress policy]
+    dnsr[Private DNS Resolver<br/>inbound endpoint]
+    hbas[Hub Bastion optional]
+  end
+
+  subgraph central[Central DNS subscription]
+    zones[privatelink.* zones<br/>linked to hub / resolver VNet]
+  end
+
+  subgraph spoke[Foundry spoke VNet 10.81.0.0/16 — deployed by this repo]
+    direction TB
+    subgraph pe[snet-private-endpoints · NSG 443 from VNet]
+      peF[PE Foundry account]
+      peD[PE blob / Sql / searchService]
+    end
+    subgraph ag[snet-agent · delegated · UDR 0.0.0.0/0 → firewall]
+      agent[Agent runtime]
+    end
+    note1[[No Bastion · no jumpbox · no public IPs<br/>DNS servers = hub resolver]]
+  end
+
+  subgraph paas[PaaS — publicNetworkAccess Disabled]
+    foundry[Foundry account + project + model]
+    deps[(Cosmos DB · Storage · AI Search)]
+  end
+
+  spoke <-- "VNet peering (spoke→hub by this repo;<br/>hub→spoke by network team or opt-in)" --> hub
+  onprem -. "DNS: conditional forwarders for<br/>openai/services.ai/cognitiveservices/…<br/>→ resolver inbound IP" .-> dnsr
+  dnsr --> zones
+  zones -. "A records registered by PE zone groups" .- peF & peD
+  onprem -- "HTTPS 443 via peering" --> peF
+  peF --- foundry
+  peD --- deps
+  agent -- "443" --> peD
+  agent -- "Entra ID / platform egress" --> fw
+  fw --> internet((Internet<br/>allow-listed FQDNs only))

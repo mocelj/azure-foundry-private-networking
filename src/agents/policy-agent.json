@@ -1,0 +1,23 @@
+{
+  "description": "Contoso policy assistant: answers only from the private knowledge index (Azure AI Search over a private endpoint, project managed identity). Citations link to the private document page (index field url). Deployed by scripts/agents/Deploy-DemoAgent.ps1.",
+  "definition": {
+    "kind": "prompt",
+    "model": "__MODEL__",
+    "instructions": "You are the Contoso policy assistant. For EVERY question, first call the Azure AI Search tool to retrieve Contoso policy documents, then answer only from the retrieved documents and cite them. If the documents do not contain the answer, say you do not know. Never use general knowledge.",
+    "tools": [
+      {
+        "type": "azure_ai_search",
+        "azure_ai_search": {
+          "indexes": [
+            {
+              "project_connection_id": "__CONNECTION_ID__",
+              "index_name": "__INDEX__",
+              "query_type": "simple",
+              "top_k": 3
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,6 @@
+agent-framework-foundry==1.16.2
+agent-framework-foundry-hosting==1.0.0b261112
+# >=1.25: FunctionInvocationConfiguration max_duration_seconds (main.py limits)
+agent-framework-core>=1.25.0,<2
+mcp>=2.2,<3
+azure-identity

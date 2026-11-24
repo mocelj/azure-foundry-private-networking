@@ -1,0 +1,47 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
+name: azure-foundry-private-networking
+metadata:
+  template: azure-foundry-private-networking@0.1.0
+
+infra:
+  provider: bicep
+  path: infra
+  module: main
+
+hooks:
+  preprovision:
+    windows:
+      shell: pwsh
+      run: ./scripts/preflight/preflight.ps1
+      continueOnError: false
+      interactive: true
+    posix:
+      shell: sh
+      run: ./scripts/preflight/preflight.sh
+      continueOnError: false
+      interactive: true
+  postprovision:
+    windows:
+      shell: pwsh
+      run: ./scripts/validation/show-next-steps.ps1
+      continueOnError: true
+      interactive: true
+    posix:
+      shell: sh
+      run: pwsh -NoProfile -File ./scripts/validation/show-next-steps.ps1 || true
+      continueOnError: true
+      interactive: true
+  # Ordered teardown before azd deletes the resource group: Foundry account delete + purge, wait for the
+  # agent subnet link to be released, unlink AMPLS. Without it, azd down fails (InUseSubnetCannotBeDeleted,
+  # CannotDeleteWorkspaceWhenLinkedToPrivateLinkScopes).
+  predown:
+    windows:
+      shell: pwsh
+      run: ./scripts/cleanup/predown.ps1
+      continueOnError: false
+      interactive: true
+    posix:
+      shell: sh
+      run: pwsh -NoProfile -File ./scripts/cleanup/predown.ps1
+      continueOnError: false
+      interactive: true

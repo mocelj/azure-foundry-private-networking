@@ -1,0 +1,18 @@
+{
+  "description": "Contoso policy assistant grounded on the Foundry IQ knowledge base (MCP endpoint over the private Search endpoint, project managed identity). Deployed by scripts/agents/Deploy-DemoAgent.ps1 -Variant foundry-iq.",
+  "definition": {
+    "kind": "prompt",
+    "model": "__MODEL__",
+    "instructions": "You are the Contoso policy assistant. For EVERY question, first call the knowledge base tool, then answer only from what it returns and cite the source documents. If the knowledge base does not contain the answer, say you do not know. Never use general knowledge.",
+    "tools": [
+      {
+        "type": "mcp",
+        "server_label": "knowledge-base",
+        "server_url": "__MCP_URL__",
+        "require_approval": "never",
+        "allowed_tools": ["knowledge_base_retrieve"],
+        "project_connection_id": "__MCP_CONNECTION__"
+      }
+    ]
+  }
+}

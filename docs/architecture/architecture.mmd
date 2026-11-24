@@ -1,0 +1,85 @@
+%% Diagram 1 — Standalone private Foundry with Bastion (default profile)
+%% Rendered in docs/architecture/architecture.md. Editable source; draw.io version: architecture.drawio
+flowchart LR
+  user([Admin / demo user<br/>browser]) -- "HTTPS 443<br/>Entra ID + MFA" --> bas
+  subgraph internet[Public internet]
+    direction TB
+    pub([Any public client]) -. "HTTPS + valid token<br/>→ 403 public access disabled" .-> foundryPublic[(Foundry public FQDNs<br/>*.openai / *.services.ai /<br/>*.cognitiveservices.azure.com)]
+  end
+
+  subgraph rg[Resource group rg-&lt;env&gt;]
+    subgraph vnet[Spoke VNet 10.80.0.0/16 — customer controlled]
+      direction TB
+      subgraph snbas[AzureBastionSubnet 10.80.3.0/26]
+        bas[Azure Bastion Standard<br/>pip: managed ingress only]
+      end
+      subgraph snmgmt[snet-management 10.80.2.0/24 · NSG: RDP only from Bastion, deny lateral]
+        jb[Windows jumpbox<br/>no public IP · Trusted Launch<br/>Entra ID sign-in · MI]
+      end
+      subgraph snpe[snet-private-endpoints 10.80.1.0/24 · NSG: 443 from VNet only]
+        peF[PE account<br/>Foundry]
+        peB[PE blob]
+        peC[PE Sql]
+        peS[PE searchService]
+        peK[PE searchService<br/>knowledge · optional]
+      end
+      subgraph snapp[snet-app 10.80.4.0/24 · optional · NSG: 8443 from VNet only, deny Internet]
+        rag[RAG demo VM · Ubuntu<br/>no public IP · no egress<br/>MI · stdlib app]
+      end
+      subgraph snagent[snet-agent 10.80.6.0/24 · delegated Microsoft.App/environments · NSG: deny Internet]
+        agentrt[Agent runtime<br/>BYO VNet injection]
+      end
+      nat[NAT gateway<br/>egress only]
+    end
+
+    subgraph dns[Private DNS zones · linked to spoke VNet]
+      z1[privatelink.cognitiveservices.azure.com]
+      z2[privatelink.openai.azure.com]
+      z3[privatelink.services.ai.azure.com]
+      z4[privatelink.blob.core.windows.net]
+      z5[privatelink.documents.azure.com]
+      z6[privatelink.search.windows.net]
+    end
+
+    subgraph paas[PaaS — publicNetworkAccess Disabled, Entra-only]
+      foundry[Foundry account AIServices<br/>disableLocalAuth · networkInjections]
+      proj[Foundry project<br/>MI · capability host Agents]
+      model[Model deployment<br/>gpt-5.4-mini DataZoneStandard]
+      cosmos[(Cosmos DB<br/>threads)]
+      st[(Storage<br/>files)]
+      srch[(AI Search<br/>vectors)]
+      kb[(Knowledge AI Search<br/>contoso-policies · optional)]
+    end
+    law[(Log Analytics<br/>diagnostics)]
+    appi[(App Insights · optional<br/>agent traces · Entra-only)]
+    ampls[AMPLS · optional<br/>PE azuremonitor · PrivateOnly]
+  end
+
+  bas -- "RDP 3389" --> jb
+  jb -- "HTTPS 443 · Entra token" --> peF
+  peF --- foundry
+  foundry --- proj
+  foundry --- model
+  agentrt -- "443" --> peC & peB & peS
+  peB --- st
+  peC --- cosmos
+  peS --- srch
+  peK --- kb
+  jb -- "HTTPS 8443" --> rag
+  rag -- "443 · MI token" --> peK & peF
+  jb -. "DNS 168.63.129.16" .-> dns
+  jb -- "443/80 web + Entra sign-in" --> nat
+  agentrt -- "Entra / ACA platform tags" --> nat
+  nat --> internet
+  foundry -. "resource logs" .-> law
+  proj -. "server-side agent traces (project MI)" .-> appi
+  appi --- law
+  jb -. "trace queries" .-> ampls
+  ampls --- appi
+
+  classDef private fill:#e8f5e9,stroke:#2e7d32;
+  classDef public fill:#ffebee,stroke:#c62828;
+  class foundry,proj,model,cosmos,st,srch,kb private;
+  classDef optional stroke-dasharray: 5 5;
+  class snapp,rag,peK,kb,appi,ampls optional;
+  class foundryPublic,pub public;

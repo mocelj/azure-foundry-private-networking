@@ -1,0 +1,69 @@
+# Offline CI: no Azure credentials, no deployment. Live validation is run separately
+# (scripts/validation/Test-Deployment.ps1) because the data planes are private by design.
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Bicep
+        run: |
+          az bicep install
+          az bicep version
+
+      - name: Bicep build + lint (warnings are errors via bicepconfig.json)
+        run: |
+          az bicep build -f infra/main.bicep --stdout > /dev/null
+          az bicep lint -f infra/main.bicep
+
+      - name: Install PowerShell modules
+        shell: pwsh
+        run: |
+          Set-PSRepository PSGallery -InstallationPolicy Trusted
+          Install-Module Pester -MinimumVersion 5.5.0 -Scope CurrentUser -Force
+          Install-Module PSRule.Rules.Azure -MinimumVersion 1.47.0 -Scope CurrentUser -Force
+
+      - name: Script syntax
+        shell: pwsh
+        run: |
+          $bad = Get-ChildItem scripts, tests -Recurse -Include *.ps1, *.psm1 | ForEach-Object {
+            $e = $null; [System.Management.Automation.Language.Parser]::ParseFile($_.FullName, [ref]$null, [ref]$e) | Out-Null
+            if ($e) { "$($_.FullName): $($e[0].Message)" } }
+          if ($bad) { $bad; exit 1 }
+          python3 -m py_compile src/rag-demo/app.py
+          python3 -m py_compile src/hosted-agents/contoso-policy-hosted/main.py
+          bash -n scripts/validation/invnet-probe.sh
+
+      - name: Pester (address plan, parameters, static security for every example profile)
+        shell: pwsh
+        run: |
+          $c = New-PesterConfiguration
+          $c.Run.Path = 'tests'
+          $c.Run.Exit = $true
+          $c.Output.Verbosity = 'Normal'
+          $c.TestResult.Enabled = $true
+          $c.TestResult.OutputPath = 'test-results.xml'
+          Invoke-Pester -Configuration $c
+
+      - name: Preflight (offline mode, default profile)
+        shell: pwsh
+        env:
+          AZURE_LOCATION: swedencentral
+          AZURE_ENV_NAME: ci
+        run: ./scripts/preflight/preflight.ps1 -SkipAzure
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results
+          path: test-results.xml

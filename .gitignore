@@ -1,0 +1,17 @@
+.azure/
+*.env
+!.env.sample
+infra/**/*.json
+!infra/main.parameters.json
+!infra/bicepconfig.json
+!examples/**/*.json
+.test-output/
+__pycache__/
+.venv/
+node_modules/
+*.log
+!examples/**/*.env
+.build/
+
+# Office lock files
+~$*
