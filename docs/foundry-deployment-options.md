@@ -12,7 +12,8 @@ its live test results. Statements marked **validated live** were exercised again
 of the repository; the latest status is from **23 November 2026**. Statements from Microsoft Learn link
 to their source. **Preview** features are marked as such.
 
-**Related documents:**  [ADR 0001 Foundry resource architecture](adr/0001-foundry-resource-architecture.md) ·
+**Related documents:** [networking walk-through](networking/networking-walkthrough.md) (packet-level
+detail for network architects) · [ADR 0001 Foundry resource architecture](adr/0001-foundry-resource-architecture.md) ·
 [hosted agent module](modules/hosted-agent-demo.md) ·
 [security design](security/security-design.md).
 
@@ -355,7 +356,7 @@ workstation behind a hub Bastion).
 | DNS | `PRIVATE_DNS_ZONE_MODE=existing`: private endpoint zone groups write A records into the **central** zones (`EXISTING_PRIVATE_DNS_ZONE_IDS`); no zones in the spoke. Spoke DNS servers = resolver inbound IP. On-premises: conditional forwarders for the **public** zone names to the resolver |
 | Monitoring | App Insights and Log Analytics join the **central AMPLS** (`EXISTING_AMPLS_ID`); the spoke creates no AMPLS endpoint (one AMPLS per DNS scope) |
 
-**Minimum firewall allow-list for the agent subnet** (from Learn):
+**Minimum firewall allow-list for the agent subnet** ([hub integration](hub-integration.md), from Learn):
 
 | Purpose | FQDN / service tag | Port |
 |---|---|---|
@@ -1203,6 +1204,7 @@ Microsoft Learn:
 - [Azure pricing calculator](https://azure.microsoft.com/pricing/calculator/)
 
 Repository: [README](../README.md) · [architecture](architecture/architecture.md) ·
+[networking walk-through](networking/networking-walkthrough.md) · [hub integration](hub-integration.md) ·
 [spoke-ready handover](spoke-ready-handover.md) · [public quick demo](public-quick-demo.md) ·
 [managed VNet](modules/managed-vnet.md) · [Foundry IQ](modules/foundry-iq.md) ·
 [monitoring](modules/monitoring.md) · [identity and RBAC](identity-rbac.md) ·

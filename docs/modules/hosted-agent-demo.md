@@ -65,13 +65,13 @@ Managed VNet needs the managed private endpoint rule `pe-foundry-account` (subre
 
 ## Network paths per mode
 
-The request flows and figures are in [deployment options, 11.5](../foundry-deployment-options.md#115-hosted-agents-network-paths-per-mode):
+The full request flows, figures and evidence are in the [networking walk-through, 9.8](../networking/networking-walkthrough.md#98-s8--hosted-agents):
 
 | Mode | Micro VM / data proxy | Runner (azd) | Figures |
 |---|---|---|---|
-| A standalone | delegated agent subnet in your VNet; platform egress NSG → NAT | jumpbox | figures 8, S8 |
-| B hub-spoke | spoke agent subnet; platform egress UDR → hub firewall (allow-list unchanged) | hub workstation (`PRIVATE_CLIENT_VM_ID`) | figures 9, S9 |
-| F managed VNet | Microsoft-managed VNet, managed PEs only (`pe-foundry-account`, `pe-knowledge-search`, `pe-ampls`) | jumpbox | figures 10, S10 |
+| A standalone | delegated agent subnet in your VNet; platform egress NSG → NAT | jumpbox | [A — standalone](../networking/networking-walkthrough.md#a--standalone) (figures 8, S8) |
+| B hub-spoke | spoke agent subnet; platform egress UDR → hub firewall (allow-list unchanged) | hub workstation (`PRIVATE_CLIENT_VM_ID`) | [B — hub-spoke](../networking/networking-walkthrough.md#b--hub-spoke) (figures 9, S9) |
+| F managed VNet | Microsoft-managed VNet, managed PEs only (`pe-foundry-account`, `pe-knowledge-search`, `pe-ampls`) | jumpbox | [F — managed VNet](../networking/networking-walkthrough.md#f--managed-vnet-preview) (figures 10, S10) |
 
 Common to all: invoke via the account private endpoint → agent guardrail → micro VM; the agent's model and
 toolbox calls go to the project endpoint; tool calls are executed by the Foundry tools service through the

@@ -184,7 +184,7 @@ if ($ragEnabled) {
 if ($cfg.NetworkMode -eq 'hub-spoke') {
     if ($cfg.EnableBastion) { Warn 'ENABLE_BASTION is ignored in hub-spoke mode (no new public IPs). Use the hub Bastion.' }
     if (($cfg.HubPeering -or $cfg.HubSidePeering) -and -not $cfg.HubVnetId) { Fail 'Hub peering requested but EXISTING_HUB_VNET_ID is empty.' }
-    if (-not $cfg.HubFirewallIp) { Warn 'HUB_FIREWALL_PRIVATE_IP empty: workload subnets get NO egress route (agents need Entra ID egress; see docs/foundry-deployment-options.md, option B).' }
+    if (-not $cfg.HubFirewallIp) { Warn 'HUB_FIREWALL_PRIVATE_IP empty: workload subnets get NO egress route (agents need Entra ID egress; see docs/hub-integration.md).' }
     if ($cfg.HubFirewallIp -and $cfg.HubFirewallIp -notmatch '^\d{1,3}(\.\d{1,3}){3}$') { Fail "HUB_FIREWALL_PRIVATE_IP '$($cfg.HubFirewallIp)' is not an IPv4 address." }
 }
 if ($cfg.NetworkMode -eq 'spoke-ready') {

@@ -13,7 +13,7 @@
 | Hosted agent: `DelegatedSubnetInUse` on (re)provision | A soft-deleted Foundry account still holds the agent subnet | Purge the account (`az cognitiveservices account purge`); `azd down --purge` does it ([Foundry blog](https://devblogs.microsoft.com/foundry/hosted-agents-private-network-setup/)) |
 | Hosted agent: `429 subnet_exhausted` | Delegated agent subnet out of addresses (sessions share it) | Size the subnet for concurrent sessions (`/24` recommended); can't be resized after assignment |
 | Hosted agent: `EHOSTUNREACH` to a private endpoint | PE IP in `192.168.0.0/24` (internal sandbox range) | Keep private endpoint addresses out of `192.168.0.0/24` |
-| Hosted agent / Agents page times out behind a firewall | TLS inspection of Entra / managed identity endpoints, or Cosmos DB zone not linked to the agent VNet | Exclude `login.microsoftonline.com`, `{region}.login.microsoft.com`, `control-{region}.identity.azure.net` from TLS inspection; link `privatelink.documents.azure.com` (foundry-deployment-options.md §6) |
+| Hosted agent / Agents page times out behind a firewall | TLS inspection of Entra / managed identity endpoints, or Cosmos DB zone not linked to the agent VNet | Exclude `login.microsoftonline.com`, `{region}.login.microsoft.com`, `control-{region}.identity.azure.net` from TLS inspection; link `privatelink.documents.azure.com` (hub-integration.md) |
 | `AuthorizationFailure` (Storage) | Network (firewall / PNA) | Use private path |
 | Agent version create → `502 upstream_dependency_failed` after ~100 s | Platform/tenant: Entra agent-identity provisioning (for example blocked by Conditional Access); **not** network | Retry later; open support case with request IDs; verify in a tenant without blocking Conditional Access. Do not open network rules. |
 | `'agent' property is deprecated` (400) | Old Responses payload | Use `"agent_reference": {"name": "...", "type": "agent_reference"}` |
@@ -23,8 +23,8 @@
 | Entra RDP option missing in Bastion | Missing `Virtual Machine User Login` role or extension | Check identity section of validation |
 | Bastion can't list or connect to the VM | Missing `Reader` on the VM, its NIC or the Bastion resource (+ VNet if Bastion is peered) | Re-run `azd provision` (assigned to the deploying principal) or assign Reader as in [identity-rbac.md](identity-rbac.md) |
 | Agent creation fails with `name or host unknown` for tools | No project capability host | Capability host is created by default in `byoVnet` |
-| Hub-spoke: workstation cannot resolve | Conditional forwarders missing for public zones | foundry-deployment-options.md §6 |
-| Agent runtime cannot reach Entra in hub-spoke | Firewall allow-list incomplete | foundry-deployment-options.md §6; check `AZFWApplicationRule` / `AZFWNetworkRule` deny logs |
+| Hub-spoke: workstation cannot resolve | Conditional forwarders missing for public zones | hub-integration.md §4 |
+| Agent runtime cannot reach Entra in hub-spoke | Firewall allow-list incomplete | hub-integration.md §3; check `AZFWApplicationRule` / `AZFWNetworkRule` deny logs |
 | `403 Traffic is not from an approved private endpoint` although PE approved + DNS correct, right after re-creating an account **with the same name** after purge | Service-side state tied to the reused name; persisted >60 min | Use a new `AZURE_ENV_NAME` (new resource token = new account name). Do not open network access |
 | `azd provision` says *no changes* after a resource was deleted out-of-band | azd compares template + parameters with the last deployment | `azd provision --no-state` |
 | `azd down`: `CannotDeleteWorkspaceWhenLinkedToPrivateLinkScopes` (module 5) | The Log Analytics workspace / App Insights are still scoped resources of an AMPLS (own, or the central hub AMPLS) | `Remove-Environment.ps1` unlinks them from every AMPLS before `azd down` and fails loudly if `azd down` fails |

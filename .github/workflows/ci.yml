@@ -25,6 +25,8 @@ jobs:
         run: |
           az bicep build -f infra/main.bicep --stdout > /dev/null
           az bicep lint -f infra/main.bicep
+          # test fixture (sample hub for testing hub-spoke without a production hub): build only
+          for f in tests/integration/sample-hub/*.bicep; do az bicep build -f "$f" --stdout > /dev/null; done
 
       - name: Install PowerShell modules
         shell: pwsh

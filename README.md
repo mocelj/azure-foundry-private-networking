@@ -65,7 +65,9 @@ in [docs/architecture/architecture.md](docs/architecture/architecture.md).
 
 **Read first:** [Deployment options — public to fully private, incl. hosted agents](docs/foundry-deployment-options.md)
 ([PDF](docs/foundry-deployment-options.pdf)) · [Whitepaper: networking and identity architecture](docs/whitepaper/foundry-private-networking-whitepaper.md)
-([PDF](docs/whitepaper/foundry-private-networking-whitepaper.pdf))
+([PDF](docs/whitepaper/foundry-private-networking-whitepaper.pdf)) ·
+[Networking walk-through for network architects: every option, request flows, packet paths](docs/networking/networking-walkthrough.md)
+([PDF](docs/networking/networking-walkthrough.pdf))
 
 ## Security characteristics
 
@@ -144,8 +146,10 @@ Option-specific inputs:
   ```
 
   The hub → spoke peering is created by the network team, or by this repository only with
-  `ENABLE_HUB_SIDE_PEERING=true` (needs Network Contributor on the hub VNet). Firewall allow-list and DNS
-  forwarding: [deployment options, option B](docs/foundry-deployment-options.md#6-option-b--hub-spoke).
+  `ENABLE_HUB_SIDE_PEERING=true` (needs Network Contributor on the hub VNet). Peering, routing, firewall allow-list and DNS
+  forwarding: [hub integration](docs/hub-integration.md).
+  **No hub to test with?** Deploy the sample hub first (test fixture in [tests/integration/sample-hub](tests/integration/sample-hub/),
+  not product) and use its outputs: [deployment guide → Testing hub-spoke without a real hub](docs/deployment-guide.md#testing-hub-spoke-without-a-real-hub).
 - **C. Spoke-ready** — nobody can reach it after deployment, by design. After peering,
   `pwsh ./scripts/handover/Switch-ToCentralDns.ps1` moves the private endpoint DNS records into the central
   zones ([runbook](docs/spoke-ready-handover.md)). Set `OUTBOUND_NETWORK_MODE=byoVnet` **before** the first
@@ -195,7 +199,7 @@ Negative tests call the public endpoints **with a valid token** and only pass on
 |---|---|---|
 | Standalone, all optional modules + Foundry IQ query planning, all trusted-service exceptions off | 101/101 | 2026-11-19 |
 | Standalone full demo + hosted agent module (`full-demo-hosted.env`) | 103/103 | 2026-11-24 |
-| Hub-spoke (lab hub with Azure Firewall, DNS Private Resolver, central DNS zones and AMPLS), all optional modules, trusted-service exceptions off | 91/91 + hosted agent | 2026-11-23 |
+| Hub-spoke against the sample hub test fixture (Azure Firewall, DNS Private Resolver, central DNS zones and AMPLS), all optional modules, trusted-service exceptions off | 91/91 + hosted agent | 2026-11-23 |
 | Managed VNet (preview), standalone + all optional modules, trusted-service exceptions off | 105/105 + hosted agent | 2026-11-23 |
 | Public quick demo, allow-listed IP + outsider rejected | 14/14 | 2026-11-19 |
 | Spoke-ready: isolation, then handover with `Switch-ToCentralDns.ps1` | 20/20 isolation, 30/30 after handover | 2026-11-18 |
@@ -230,9 +234,9 @@ subscription than the environment. Don't reuse an account name right after a pur
 | Topic | Documents |
 |---|---|
 | Choosing an option | [Deployment options](docs/foundry-deployment-options.md) ([PDF](docs/foundry-deployment-options.pdf)) · [Whitepaper](docs/whitepaper/foundry-private-networking-whitepaper.md) ([PDF](docs/whitepaper/foundry-private-networking-whitepaper.pdf)) · [Cost estimation](docs/cost-estimation.md) |
-| Deploying | [Deployment guide](docs/deployment-guide.md) · [Walkthrough](docs/walkthrough.md) · [Naming conventions](docs/naming-conventions.md) · [Spoke-ready handover](docs/spoke-ready-handover.md) · [Public quick demo](docs/public-quick-demo.md) |
+| Deploying | [Deployment guide](docs/deployment-guide.md) · [Walkthrough](docs/walkthrough.md) · [Hub integration](docs/hub-integration.md) · [Naming conventions](docs/naming-conventions.md) · [Spoke-ready handover](docs/spoke-ready-handover.md) · [Public quick demo](docs/public-quick-demo.md) |
 | Architecture | [Architecture](docs/architecture/architecture.md) · [ADR 0001: Foundry resource architecture](docs/adr/0001-foundry-resource-architecture.md) · [Compatibility](docs/compatibility.md) |
-| Networking | [Private DNS](docs/private-dns.md) · [Private Link explained](docs/private-link-explained.md) · [Network directions](docs/network-directions.md) · [Private-networking limitations](docs/private-networking-limitations.md) |
+| Networking | [Networking walk-through](docs/networking/networking-walkthrough.md) ([PDF](docs/networking/networking-walkthrough.pdf)) · [Private DNS](docs/private-dns.md) · [Private Link explained](docs/private-link-explained.md) · [Network directions](docs/network-directions.md) · [Private-networking limitations](docs/private-networking-limitations.md) |
 | Security | [Security design](docs/security/security-design.md) · [Threat model](docs/security/threat-model.md) · [Identity and RBAC](docs/identity-rbac.md) |
 | Modules | [AI Search](docs/modules/ai-search.md) · [RAG demo](docs/modules/rag-demo.md) · [Agent demo](docs/modules/agent-demo.md) · [Monitoring](docs/modules/monitoring.md) · [Foundry IQ](docs/modules/foundry-iq.md) · [Hosted agent](docs/modules/hosted-agent-demo.md) · [Managed VNet](docs/modules/managed-vnet.md) |
 | Operations | [Troubleshooting](docs/troubleshooting.md) |

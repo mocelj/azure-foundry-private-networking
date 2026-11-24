@@ -2,7 +2,7 @@
 
 Expected duration: ~25 minutes (≈15 min provisioning for the core; ~25–30 min with all optional
 modules). Validated in **swedencentral** (latest: 2026-11-19).
-For hub-spoke see [deployment-guide.md](deployment-guide.md) and [deployment options, option B](foundry-deployment-options.md#6-option-b--hub-spoke).
+For hub-spoke see [deployment-guide.md](deployment-guide.md) and [hub-integration.md](hub-integration.md).
 Which option to choose (public, standalone, hub-spoke, spoke-ready, managed VNet; prompt and hosted agents): [foundry-deployment-options.md](foundry-deployment-options.md) ([PDF](foundry-deployment-options.pdf)).
 
 ## 1. Prerequisites

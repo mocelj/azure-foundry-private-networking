@@ -59,7 +59,7 @@ VNet injection + Standard agent setup; `none` = models only (no agents); `manage
 
 ## 5. Hub-spoke specifics
 
-Inputs from the network team (details: [deployment options, option B](foundry-deployment-options.md#6-option-b--hub-spoke)):
+Inputs from the network team (details: [hub-integration.md](hub-integration.md)):
 
 | Variable | Value |
 |---|---|
@@ -72,10 +72,25 @@ Inputs from the network team (details: [deployment options, option B](foundry-de
 
 `spoke-ready` → hub: [spoke-ready-handover.md](spoke-ready-handover.md) (`scripts/handover/Switch-ToCentralDns.ps1`).
 
-### Private client in the hub
+### Testing hub-spoke without a real hub
 
-To let the postprovision hooks (seeding, demo agents)
-and `Test-Deployment.ps1` run **from an existing VM in the hub automatically**, also set:
+`tests/integration/sample-hub/` provides a sample hub for testing hub-spoke without a production hub (**test fixture, not product**): firewall with
+the documented agent allow-list, DNS resolver, central DNS zones, Bastion, a corporate workstation VM
+and a central AMPLS.
+
+```powershell
+az group create -n rg-<prefix>-sample-hub -l swedencentral
+az deployment group create -g rg-<prefix>-sample-hub -n sample-hub -f tests/integration/sample-hub/sample-hub.bicep -p adminPrincipalId=$(az ad signed-in-user show --query id -o tsv)
+az deployment group create -g rg-<prefix>-sample-hub -n sample-hub-ampls -f tests/integration/sample-hub/sample-hub-ampls.bicep
+# outputs: hubVnetId, firewallPrivateIp, resolverInboundIp, zoneIdsJson, clientVmId, amplsId
+```
+
+Run the AMPLS step **only after** `sample-hub` succeeded. It adds `snet-hub-pe` to the hub VNet, which a
+later `sample-hub` deployment would try to remove (`InUseSubnetCannotBeDeleted`); in that case delete
+`pe-ampls-sample-hub` and `snet-hub-pe`, deploy `sample-hub` again, then the AMPLS step.
+
+Then set the spoke variables from those outputs. To let the postprovision hooks (seeding, demo agents)
+and `Test-Deployment.ps1` run **from the hub workstation automatically**, also set:
 
 | Variable | Value | Effect |
 |---|---|---|
@@ -99,6 +114,7 @@ Reports: `.test-output/validation-<timestamp>.md`.
 ```powershell
 azd down -e <env> --purge --force                                   # ~45 min with VNet injection, ~15 min without
 # or: pwsh ./scripts/cleanup/Remove-Environment.ps1 -Environment <env>
+az group delete -n rg-<prefix>-sample-hub --yes                          # sample hub (after the spokes)
 ```
 
 `Remove-Environment.ps1` handles the required order: delete projects → delete account (retry) →

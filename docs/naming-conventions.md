@@ -7,7 +7,7 @@ in hub-spoke, where the **workload** (this repo) is a **spoke** and the **hub** 
 
 | Term | Meaning in this repo |
 |---|---|
-| **Hub** (network) | The customer's existing hub VNet: firewall, DNS resolver, gateways, central private DNS zones, central AMPLS. **Never deployed by this repo** |
+| **Hub** (network) | The customer's existing hub VNet: firewall, DNS resolver, gateways, central private DNS zones, central AMPLS. **Never deployed by this repo** in production; `tests/integration/sample-hub/` provides a sample hub for testing |
 | **Foundry hub** (legacy) | The older `Microsoft.MachineLearningServices` hub workspace. **Not used**; this repo uses the current Foundry account + project model |
 | **Spoke** | The workload VNet this repo deploys in `hub-spoke` and `spoke-ready` mode |
 
@@ -22,6 +22,7 @@ in hub-spoke, where the **workload** (this repo) is a **spoke** and the **hub** 
 | Spoke prepared for later integration | `<prefix>-spokeready` | `rg-<prefix>-spokeready` | `examples/hub-spoke/spoke-ready.env` |
 | Public quick demo (NOT private) | `<prefix>-public` | `rg-<prefix>-public` | `examples/public/public-quick-demo.env` (project `public-demo`) |
 | Standalone with managed VNet for agents (preview) | `<prefix>-mvnet` | `rg-<prefix>-mvnet` | `examples/managed-vnet/managed-vnet.env` (project `mvnet-demo`) |
+| **Sample** hub (test fixture, not azd) | — | `rg-<prefix>-sample-hub` | `tests/integration/sample-hub/sample-hub.bicep` |
 
 `<prefix>` identifies the owner/tenant/purpose, e.g. `contoso` or `contoso-dev`.
 
@@ -52,6 +53,12 @@ Rules:
 | Log Analytics / App Insights / AMPLS | `log-<token>`, `appi-<token>`, `ampls-<token>` | CAF `log`, `appi`, `ampls` |
 | Bastion / jumpbox / RAG VM | `bas-<token>`, `vm-jump-<token6>`, `vm-rag-<token6>` | CAF `bas`, `vm` |
 | Alerts / query pack | `alert-<env>-<purpose>`, `ag-<env>`, `qp-<env>` | — |
+
+## Names in the sample hub (`tests/integration/sample-hub/`)
+
+Fixed names with the `sample-hub` suffix: `vnet-sample-hub`, `afw-sample-hub`, `afwp-sample-hub`,
+`bas-sample-hub`, `dnspr-sample-hub`, `ampls-sample-hub`, `log-sample-hub-<hash>`, and the corporate
+workstation `vm-hub-workstation`. All resources carry the tag `purpose = sample-hub-test-fixture`.
 
 ## Repository names
 

@@ -137,7 +137,7 @@ mode the repo therefore creates **no public IPs**; access is through the custome
 
 ## 7. Integrating the spoke into a landing zone
 
-See [option B in the deployment options](../foundry-deployment-options.md#6-option-b--hub-spoke): address plan, peering (spoke side by default,
+See [`../hub-integration.md`](../hub-integration.md): address plan, peering (spoke side by default,
 hub side opt-in), UDR to the hub firewall, centralised DNS (`PRIVATE_DNS_ZONE_MODE=existing`),
 firewall allow-list, DNS forwarding for on-premises clients, the central AMPLS (`EXISTING_AMPLS_ID`) and
 an existing private client for hooks and tests (`PRIVATE_CLIENT_VM_ID` / `PRIVATE_CLIENT_PRINCIPAL_ID`).
