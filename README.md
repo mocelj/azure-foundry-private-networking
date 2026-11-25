@@ -11,8 +11,18 @@ demo to an enterprise hub-spoke spoke.
 > test and adapt it to your own security, compliance and operational requirements before any production use.
 > Features marked **preview** are subject to the
 > [Supplemental Terms of Use for Microsoft Azure Previews](https://azure.microsoft.com/support/legal/preview-supplemental-terms/).
-> All options were **validated live in Sweden Central (`swedencentral`) between 17 and 24 November 2026**;
+> All options were **validated live in Sweden Central (`swedencentral`) between 17 and 25 November 2026**;
 > Foundry networking changes often — re-validate in your region before you rely on a capability.
+
+> [!NOTE]
+> **Reference and investigation project, not a production landing zone.** It demonstrates and validates the
+> networking and identity patterns end to end with the Azure Developer CLI for convenience. In production, the
+> infrastructure would typically go through your platform team's Bicep or Terraform pipelines (for example with
+> [Azure Verified Modules](https://aka.ms/avm)); `infra/` is plain Bicep (subscription scope) and can be deployed
+> without azd with `az deployment sub create` and your own parameter file (`infra/main.parameters.json` uses azd
+> variable substitution; the post-provision steps such as index seeding and demo agents are azd hooks and would
+> become pipeline steps). azd remains a good fit for deploying the hosted agent itself (`src/hosted-agents`)
+> from an in-network pipeline runner.
 
 ## What you get
 
