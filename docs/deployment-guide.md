@@ -89,7 +89,30 @@ Run the AMPLS step **only after** `sample-hub` succeeded. It adds `snet-hub-pe` 
 later `sample-hub` deployment would try to remove (`InUseSubnetCannotBeDeleted`); in that case delete
 `pe-ampls-sample-hub` and `snet-hub-pe`, deploy `sample-hub` again, then the AMPLS step.
 
-Then set the spoke variables from those outputs. To let the postprovision hooks (seeding, demo agents)
+Then set the spoke variables from those outputs (on top of `examples/hub-spoke/hub-spoke.env`):
+
+| Variable | From |
+|---|---|
+| `EXISTING_HUB_VNET_ID` | `hubVnetId` |
+| `HUB_FIREWALL_PRIVATE_IP` | `firewallPrivateIp` |
+| `CUSTOM_DNS_SERVERS` | `resolverInboundIp` |
+| `EXISTING_PRIVATE_DNS_ZONE_IDS` | the zone IDs in `zoneIdsJson`, comma-separated |
+| `EXISTING_AMPLS_ID` | `amplsId` (monitoring module) |
+| `ENABLE_HUB_SIDE_PEERING` | `true`: this hub is yours, so the template may create the hub → spoke peering (with a real hub, the network team creates it) |
+
+```powershell
+$hub = az deployment group show -g rg-<prefix>-sample-hub -n sample-hub --query properties.outputs -o json | ConvertFrom-Json
+azd env set EXISTING_HUB_VNET_ID $hub.hubVnetId.value
+azd env set HUB_FIREWALL_PRIVATE_IP $hub.firewallPrivateIp.value
+azd env set CUSTOM_DNS_SERVERS $hub.resolverInboundIp.value
+azd env set EXISTING_PRIVATE_DNS_ZONE_IDS ((($hub.zoneIdsJson.value | ConvertFrom-Json).PSObject.Properties.Value) -join ',')
+azd env set EXISTING_AMPLS_ID (az deployment group show -g rg-<prefix>-sample-hub -n sample-hub-ampls --query properties.outputs.amplsId.value -o tsv)
+azd env set ENABLE_HUB_SIDE_PEERING true
+azd env set PRIVATE_CLIENT_VM_ID $hub.clientVmId.value
+azd env set PRIVATE_CLIENT_PRINCIPAL_ID $hub.clientPrincipalId.value
+```
+
+To let the postprovision hooks (seeding, demo agents)
 and `Test-Deployment.ps1` run **from the hub workstation automatically**, also set:
 
 | Variable | Value | Effect |

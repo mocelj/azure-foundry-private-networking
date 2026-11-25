@@ -39,6 +39,7 @@ Counts are the checks of the full `Test-Deployment.ps1` run (all sections) unles
 | **G** public quick demo (**not private**) | `public/public-quick-demo.env` | **14/14**, including an outsider VM with another egress IP: 403 | 2026-11-19 |
 | Hosted agents in **A**, **B**, **F** (azd from an in-network runner, toolbox, guardrails) | A / B / F profiles + `Deploy-HostedAgentAzd.ps1` | PASS in all three | 2026-11-23 |
 | **Hosted-agent module** (module 7) | `private-rag/full-demo-hosted.env` | **103/103** incl. the `hosted` section; provision incl. all hooks 33 min | 2026-11-24 |
+| **Published repository from a fresh clone**, following the README and deployment guide literally: E+ standalone, and B hub-spoke against the sample hub (`tests/integration/sample-hub/`) with all modules incl. the hosted agent | `private-rag/full-demo-hosted.env`; `hub-spoke/hub-spoke.env` + modules | **103/103** standalone; **86/86** hub-spoke incl. the `hosted` section (first hub-spoke run of the module) | 2026-11-25 |
 | Offline: Bicep build + lint, Pester (all profiles) | all | green in CI | every push |
 
 ### Optional modules (first live run of each)
@@ -50,7 +51,7 @@ Counts are the checks of the full `Test-Deployment.ps1` run (all sections) unles
 | 4 Demo agent (Azure AI Search tool) | Agent calls the search tool, grounded answer with citation; 77/77 | 2026-11-18 |
 | 5 Advanced monitoring | Agent traces in App Insights with public ingestion and query disabled; public trace query rejected (`PrivateLinkValidationFailedError`); validated standalone and hub-spoke (central AMPLS) | 2026-11-18/19 |
 | 6 Foundry IQ | Knowledge base over the private index, MCP agent; standalone 71/71, hub-spoke 67/67 (network + in-network sections). Query planning (`low`): 403 without the shared private link, 403 while pending, 200 after approval; 101/101 | 2026-11-19 |
-| 7 Hosted agent demo | 103/103 (see above) | 2026-11-24 |
+| 7 Hosted agent demo | 103/103 standalone; 86/86 hub-spoke (see above) | 2026-11-24 / 2026-11-25 |
 
 ### Hosted agents per network mode
 

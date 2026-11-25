@@ -20,7 +20,7 @@ to [`managed-vnet.env`](../../examples/managed-vnet/managed-vnet.env) (all modul
 [`hub-spoke.env`](../../examples/hub-spoke/hub-spoke.env) together with `ENABLE_AI_SEARCH`, `ENABLE_FOUNDRY_IQ`
 and `PRIVATE_CLIENT_VM_ID` (hub workstation, as validated in B).
 
-Status: **module implemented and validated live 2026-11-24** (standalone full demo: provision 33 min, `Test-Deployment.ps1` 103/103 incl. the `hosted` section, [validation summary](../security/validation-summary.md)). The deployment path itself
+Status: **module implemented and validated live 2026-11-24** (standalone full demo: provision 33 min, `Test-Deployment.ps1` 103/103 incl. the `hosted` section, [validation summary](../security/validation-summary.md)) Hub-spoke (hub workstation as runner): **86/86** incl. the `hosted` section on 2026-11-25.. The deployment path itself
 (azd project + script) was validated live in A, B and F on 2026-11-23
 ([validation summary](../security/validation-summary.md)).
 

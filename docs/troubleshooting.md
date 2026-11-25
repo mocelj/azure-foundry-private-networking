@@ -21,6 +21,7 @@
 | Soft-deleted account blocks redeploy | Same name in same RG | `azd down --purge` or purge manually (preflight detects) |
 | Run Command fails / jumpbox unreachable | VM deallocated by auto-shutdown | `Test-Deployment.ps1` starts it; or `az vm start` |
 | Entra RDP option missing in Bastion | Missing `Virtual Machine User Login` role or extension | Check identity section of validation |
+| `OSProvisioningTimedOut` for `vm-jump-*` during `azd provision` | Windows first-boot setup didn't finish within the platform's time limit (VM shows provisioning `Failed`, agent `Not Ready`); not caused by the template | Delete the VM (`az vm delete -g <rg> -n vm-jump-<token> --yes`) and run `azd provision` again; the template recreates it identically |
 | Bastion can't list or connect to the VM | Missing `Reader` on the VM, its NIC or the Bastion resource (+ VNet if Bastion is peered) | Re-run `azd provision` (assigned to the deploying principal) or assign Reader as in [identity-rbac.md](identity-rbac.md) |
 | Agent creation fails with `name or host unknown` for tools | No project capability host | Capability host is created by default in `byoVnet` |
 | Hub-spoke: workstation cannot resolve | Conditional forwarders missing for public zones | hub-integration.md §4 |

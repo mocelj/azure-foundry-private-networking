@@ -201,6 +201,7 @@ findings: [validation summary](docs/security/validation-summary.md); click-by-cl
 |---|---|---|
 | Standalone, all optional modules + Foundry IQ query planning, all trusted-service exceptions off | 101/101 | 2026-11-19 |
 | Standalone full demo + hosted agent module (`full-demo-hosted.env`) | 103/103 | 2026-11-24 |
+| Published repo from a fresh clone: standalone full demo + hosted agent; hub-spoke + modules + hosted agent against the sample hub | 103/103; 86/86 | 2026-11-25 |
 | Hub-spoke against the sample hub test fixture (Azure Firewall, DNS Private Resolver, central DNS zones and AMPLS), all optional modules, trusted-service exceptions off | 91/91 + hosted agent | 2026-11-23 |
 | Managed VNet (preview), standalone + all optional modules, trusted-service exceptions off | 105/105 + hosted agent | 2026-11-23 |
 | Public quick demo, allow-listed IP + outsider rejected | 14/14 | 2026-11-19 |
